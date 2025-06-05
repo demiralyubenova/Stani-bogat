@@ -120,8 +120,34 @@ void save_questions_to_file(const char *filename) {
     }
 
     fclose(file);
-}
 
+}
+void load_questions(const char *filename, char answers[4][100], char *question, int *correct_answer, int *difficulty, bool *found, int current_question) {
+    FILE *file = fopen(filename, "r");
+    if (!file) {
+        *found = false;
+        return;
+    }
+
+    int index = 0;
+    while (!feof(file)) {
+        char buffer[512];
+        fgets(buffer, sizeof(buffer), file);
+        if (index == current_question) {
+            sscanf(buffer, "%[^|]|%[^|]|%[^|]|%[^|]|%[^|]|%d|%d",
+                   question,
+                   answers[0], answers[1], answers[2], answers[3],
+                   correct_answer, difficulty);
+            *found = true;
+            fclose(file);
+            return;
+        }
+        index++;
+    }
+
+    *found = false;
+    fclose(file);
+}
 void cleanup_quiz() {
     QuizQuestion *current = head;
     while (current) {

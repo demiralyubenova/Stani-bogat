@@ -1,13 +1,30 @@
-// menu.c
 #include "menu.h"
 #include "../quiz/quiz.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <ctype.h>
+#include <stdbool.h>
+
 #ifdef _WIN32
 #include <conio.h>
 #define GETCH() getch()
 #else
 #define GETCH() getchar()
 #endif
+
+#define OPTION_COUNT 5
+#define QUESTION_COUNT 10
+
+bool is_empty_string(const char *str) {
+    if (str == NULL) return true;
+    while (*str) {
+        if (!isspace((unsigned char)*str)) return false;
+        str++;
+    }
+    return true;
+}
 
 void option_menu(unsigned char c, int *otg, int count) {
     if (c == 224 || c == 0) {
